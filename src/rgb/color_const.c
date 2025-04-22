@@ -41,11 +41,11 @@ const RGB_t SW_LABEL_COLORS_KB[] = {
 const RGB_t SW_COLORS_KB[] = {
     {255, 51, 0},      // START
     {255, 255, 255},  // BT-A
-    {255, 51, 0},  // BT-B
-    {255, 51, 0},  // BT-C
+    {0, 102, 255},  // BT-B
+    {0, 102, 255},  // BT-C
     {255, 255, 255},  // BT-D
-    {0, 102, 255},     // FX-L
-    {0, 102, 255},     // FX-R
+    {255, 51, 0},     // FX-L
+    {255, 51, 0},     // FX-R
 };
 
 RGB_t ws2812b_data[WS2812B_LED_SIZE] = {0};
