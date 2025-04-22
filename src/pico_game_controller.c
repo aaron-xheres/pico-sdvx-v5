@@ -88,15 +88,27 @@ void joy_mode() {
 /**
  * Keyboard Mode
  **/
+bool is_holding_mod() {
+  return (report.buttons >> 6) % 2 == 1;
+}
+
 void key_mode() {
   if (tud_hid_ready()) {  // Wait for ready, updating mouse too fast hampers movement
     /*------------- Keyboard -------------*/
     uint8_t nkro_report[32] = {0};
+
     for (int i = 0; i < SW_GPIO_SIZE; i++) {
       if ((report.buttons >> i) % 2 == 1) {
-        uint8_t bit = SW_KEYCODE[i] % 8;
-        uint8_t byte = (SW_KEYCODE[i] / 8) + 1;
-        if (SW_KEYCODE[i] >= 240 && SW_KEYCODE[i] <= 247) {
+        uint8_t keycode;
+        if (is_holding_mod()) {
+          keycode = SW_KEYCODE_MOD[i];
+        } else {
+          keycode = SW_KEYCODE[i];
+        }
+
+        uint8_t bit = keycode % 8;
+        uint8_t byte = (keycode / 8) + 1;
+        if (keycode >= 240 && keycode <= 247) {
           nkro_report[0] |= (1 << bit);
         } else if (byte > 0 && byte <= 31) {
           nkro_report[byte] |= (1 << bit);
@@ -104,28 +116,33 @@ void key_mode() {
       }
     }
 
+    // Handle Encoders -> Key Presses
     for (int i = 0; i < ENC_GPIO_SIZE; i++) {
-      if(enc_val[i] != prev_enc_val[i]) {
+      if (enc_val[i] != prev_enc_val[i]) {
+        uint8_t keycode;
         uint8_t bit, byte;
         int delta = (enc_val[i] - prev_enc_val[i]) * (ENC_REV[i] ? 1 : -1);
-        if(delta < 0) {
-          bit = ENC_KEYCODE_TURN_LEFT[i] % 8;
-          byte = (ENC_KEYCODE_TURN_LEFT[i] / 8) + 1;
 
-          if (ENC_KEYCODE_TURN_LEFT[i] >= 240 && ENC_KEYCODE_TURN_LEFT[i] <= 247) {
-            nkro_report[0] |= (1 << bit);
-          } else if (byte > 0 && byte <= 31) {
-            nkro_report[byte] |= (1 << bit);
+        if (delta < 0) {
+          if (is_holding_mod()) {
+            keycode = ENC_KEYCODE_TURN_LEFT_MOD[i];
+          } else {
+            keycode = ENC_KEYCODE_TURN_LEFT[i];
           }
         } else {
-          bit = ENC_KEYCODE_TURN_RIGHT[i] % 8;
-          byte = (ENC_KEYCODE_TURN_RIGHT[i] / 8) + 1;
-
-          if (ENC_KEYCODE_TURN_RIGHT[i] >= 240 && ENC_KEYCODE_TURN_RIGHT[i] <= 247) {
-            nkro_report[0] |= (1 << bit);
-          } else if (byte > 0 && byte <= 31) {
-            nkro_report[byte] |= (1 << bit);
+          if (is_holding_mod()) {
+            keycode = ENC_KEYCODE_TURN_RIGHT_MOD[i];
+          } else {
+            keycode = ENC_KEYCODE_TURN_RIGHT[i];
           }
+        }
+
+        bit = keycode % 8;
+        byte = (keycode / 8) + 1;
+        if (keycode >= 240 && keycode <= 247) {
+          nkro_report[0] |= (1 << bit);
+        } else if (byte > 0 && byte <= 31) {
+          nkro_report[byte] |= (1 << bit);
         }
 
         prev_enc_val[i] = enc_val[i];
