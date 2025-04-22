@@ -28,7 +28,7 @@ const uint8_t SW_KEYCODE[] = {
 // Combination with Mod Key (back extra button)
 const uint8_t SW_KEYCODE_MOD[] = {
   HID_KEY_ESCAPE, HID_KEY_NONE, HID_KEY_NONE, HID_KEY_DELETE, 
-  HID_KEY_F1, HID_KEY_F2, 
+  HID_KEY_1, HID_KEY_2, 
   HID_KEY_NONE, HID_KEY_NONE, HID_KEY_F5,
 };
 
