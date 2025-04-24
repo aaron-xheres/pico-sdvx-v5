@@ -6,7 +6,7 @@ void ws2812b_color_joy(uint32_t counter) {
   if (time_us_64() > latest_switch_ts + timeout_us) {  // timed out
     for (int i = 0; i < WS2812B_LED_SIZE; i++) ws2812b_data[i] = COLOR_BLACK;
   } else {
-    RGB_t base_color = COLOR_BLACK;
+    RGB_t base_color = COLOR_BASE_JOY;
     base_color.r *= WS2812B_BRIGHTNESS;
     base_color.g *= WS2812B_BRIGHTNESS;
     base_color.b *= WS2812B_BRIGHTNESS;
