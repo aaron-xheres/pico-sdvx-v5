@@ -123,13 +123,17 @@ void key_mode() {
         uint8_t bit, byte;
         int delta = (enc_val[i] - prev_enc_val[i]) * (ENC_REV[i] ? 1 : -1);
 
+        if (abs(delta) < ENC_KEYCODE_READ_THRESHOLD) {
+          continue;
+        }
+
         if (delta < 0) {
           if (is_holding_mod()) {
             keycode = ENC_KEYCODE_TURN_LEFT_MOD[i];
           } else {
             keycode = ENC_KEYCODE_TURN_LEFT[i];
           }
-        } else {
+        } else if (delta > 0) {
           if (is_holding_mod()) {
             keycode = ENC_KEYCODE_TURN_RIGHT_MOD[i];
           } else {
@@ -144,9 +148,9 @@ void key_mode() {
         } else if (byte > 0 && byte <= 31) {
           nkro_report[byte] |= (1 << bit);
         }
-
-        prev_enc_val[i] = enc_val[i];
       }
+
+      prev_enc_val[i] = enc_val[i];
     }
 
     tud_hid_n_report(0x00, REPORT_ID_KEYBOARD, &nkro_report,
