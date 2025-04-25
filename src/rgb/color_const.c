@@ -3,7 +3,7 @@ const double WS2812B_BRIGHTNESS = 0.2;
 
 const RGB_t COLOR_BLACK = {0, 0, 0};
 const RGB_t COLOR_BASE_JOY = {0, 0, 0};
-const RGB_t COLOR_BASE_KB = {127, 0, 255};
+const RGB_t COLOR_BASE_KB = {0, 0, 0};
 
 /* Joystick Mode */
 const RGB_t SW_LABEL_COLORS_JOY[] = {
@@ -15,6 +15,10 @@ const RGB_t SW_LABEL_COLORS_JOY[] = {
     {128, 51, 0},  // FX-L
     {128, 51, 0},  // FX-R
 };
+const RGB_t SW_KNOB_LABEL_COLORS_JOY[] = {
+    {0, 102, 255},  // Left
+    {255, 0, 102},  // Right
+};
 const RGB_t SW_COLORS_JOY[] = {
     {0, 0, 255},      // START
     {255, 255, 255},  // BT-A
@@ -23,10 +27,6 @@ const RGB_t SW_COLORS_JOY[] = {
     {255, 255, 255},  // BT-D
     {255, 51, 0},     // FX-L
     {255, 51, 0},     // FX-R
-};
-const RGB_t SW_KNOB_LABEL_COLORS_JOY[] = {
-    {0, 102, 255},  // Left
-    {255, 0, 102},  // Right
 };
 
 /* Keyboard Mode */
